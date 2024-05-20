@@ -1,0 +1,26 @@
+
+.weatherCard {
+  background-color: #f8f9fa; // Light grey background
+  border: 1px solid #dee2e6; // Light grey border
+  border-radius: 0.25rem;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  h1, h2 {
+    color: #007bff; // Bootstrap primary color
+  }
+
+  p {
+    color: #212529; // Bootstrap default text color
+    margin: 5px 0;
+  }
+
+  .forecastItem {
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    border-radius: 0.25rem;
+    margin-top: 10px;
+  }
+}

@@ -1,0 +1,18 @@
+.card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 30%;
+  h2 {
+    color: #0056b3;
+  }
+
+  p {
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}

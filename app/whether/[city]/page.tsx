@@ -16,6 +16,8 @@ function Whether() {
     setWeatherData(response.data);
   };
   useEffect(() => {
+    const city = searchParams.get("city");
+    console.log(city);
     const latitude = searchParams.get("latitude");
     const longitude = searchParams.get("longitude");
     if (latitude && longitude) {

@@ -1,26 +1,104 @@
-
 .weatherCard {
-  background-color: #f8f9fa; // Light grey background
-  border: 1px solid #dee2e6; // Light grey border
+  background: rgba(255, 255, 255, 0.8); // Semi-transparent white background
+  border: 1px solid rgba(0, 123, 255, 0.5); // Light blue border
   border-radius: 0.25rem;
-  padding: 20px;
-  margin-bottom: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-  h1, h2 {
-    color: #007bff; // Bootstrap primary color
+  backdrop-filter: blur(10px);
+  // width: 100vw;
+  h1,
+  h2 {
+    color: #212122;
+    font-size: 35px;
+    font-weight: bold;
   }
 
-  p {
-    color: #212529; // Bootstrap default text color
-    margin: 5px 0;
+  .currentWeather {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    .imageStyle {
+      width: 200px;
+      height: 200px;
+    }
+
+    .weatherDetails {
+      flex: 1;
+      margin-left: 20px;
+
+      h3 {
+        font-size: 24px;
+        font-weight: bold;
+        color: #007bff;
+      }
+
+      h2 {
+        font-size: 40px;
+        font-weight: bold;
+        color: #212529;
+        margin: 10px 0;
+      }
+
+      p {
+        color: #212529; // Bootstrap default text color
+        margin: 5px 0;
+      }
+    }
   }
 
   .forecastItem {
-    background-color: #ffffff;
-    border: 1px solid #ced4da;
+    display: flex;
+    align-items: center;
+    width: 40%;
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    border: 1px solid #8581818f;
     padding: 10px;
-    border-radius: 0.25rem;
+    border-radius: 15px;
     margin-top: 10px;
+    color: #ffffff; // White text color for better contrast
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .forecastImage {
+      width: 100px;
+      height: 100px;
+      margin-right: 20px;
+    }
+
+    .forecastDetails {
+      h3 {
+        font-size: 20px;
+        font-weight: bold;
+      }
+      h2 {
+        font-size: 30px;
+        font-weight: bold;
+        color: #212529;
+        margin: 10px 0;
+      }
+
+      p {
+        margin: 5px 0;
+      }
+    }
+  }
+  .selectHour {
+    margin: 20px;
+    label {
+      font-size: 30px;
+      font-weight: bold;
+      color: #007bff;
+    }
+    select {
+      height: 40px;
+      width: 150px;
+      padding: 5px;
+      font-size: 16px;
+      border: 1px solid rgba(0, 123, 255, 0.5);
+      border-radius: 0.25rem;
+      background-color: #fff;
+      color: #007bff;
+    }
   }
 }

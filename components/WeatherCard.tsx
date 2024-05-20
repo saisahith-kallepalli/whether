@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import styles from "../styles/WeatherCard.module.scss";
 import Clock from "react-clock";
 import clear from "../icons/clear-day.svg";
@@ -8,8 +7,16 @@ import rain from "../icons/rain.svg";
 import heavyRain from "../icons/heavy-rain.svg";
 import snow from "../icons/snow.svg";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
+import { useParams } from "next/navigation";
 const WeatherCard = ({ data }: any) => {
+  const [selectedHour, setSelectedHour] = useState(new Date().getHours());
+  const { city } = useParams();
+  useEffect(() => {
+    console.log(data);
+  }, []);
+
   const getWeatherIcon = (code: number) => {
     switch (code) {
       case 0:
@@ -28,25 +35,28 @@ const WeatherCard = ({ data }: any) => {
         return clear;
     }
   };
-  const [value, setValue] = useState(new Date());
-  const hourly = data?.hourly;
-  const currentWeather: any = [];
-  const current = hourly?.time?.forEach((each: any, index: number) => {
-    if (
-      new Date().getDate() === new Date(each).getDate() &&
-      new Date().getHours() === new Date(each).getHours()
-    ) {
-      currentWeather[0] = {
-        time: hourly?.time[index],
-        temperature: hourly?.temperature_2m[index],
-        humidity: hourly?.relative_humidity_2m[index],
-        precipitation: hourly?.precipitation[index],
-        rain: hourly?.rain[index],
-        weatherCode: hourly?.weather_code[index],
-      };
-    }
-  });
-  // utils/formatDate.js
+
+  const hourly = data?.hourly || {};
+  const currentWeather = hourly.time?.reduce(
+    (acc: any, each: any, index: number) => {
+      if (
+        new Date().getDate() === new Date(each).getDate() &&
+        selectedHour === new Date(each).getHours()
+      ) {
+        acc = {
+          time: hourly.time[index],
+          temperature: hourly.temperature_2m[index],
+          humidity: hourly.relative_humidity_2m[index],
+          precipitation: hourly.precipitation[index],
+          rain: hourly.rain[index],
+          weatherCode: hourly.weather_code[index],
+        };
+      }
+      return acc;
+    },
+    {}
+  );
+
   const formatDate = (dateString: string) => {
     const options: any = {
       weekday: "long",
@@ -62,54 +72,87 @@ const WeatherCard = ({ data }: any) => {
   const mapFuncDay = () => {
     const datar: any = [];
     const today = new Date();
-    const dates = [1, 2, 3, 4, 5, 6, 7].map((each) => {
-      let newD: any = today.getDate() + each;
-      return newD;
-    });
+    const dates = Array.from({ length: 7 }, (_, i) => today.getDate() + i + 1);
     const time = new Date().getHours();
-    hourly?.time?.forEach((date: any, index: number) => {
+
+    hourly.time?.forEach((date: any, index: number) => {
       if (
         dates.includes(new Date(date).getDate()) &&
-        time === new Date(date).getHours()
+        selectedHour === new Date(date).getHours()
       ) {
         datar.push(
           <div className={styles.forecastItem} key={index}>
             <Image
-              src={getWeatherIcon(hourly?.weather_code[index])}
+              src={getWeatherIcon(hourly.weather_code[index])}
               alt="Weather Icon"
+              className={styles.forecastImage}
             />
-            <p>Time: {formatDate(hourly?.time[index])}</p>
-            <p>Temperature: {hourly?.temperature_2m[index]} °C</p>
-            <p>Humidity: {hourly?.relative_humidity_2m[index]} %</p>
-            <p>Precipitation: {hourly?.precipitation[index]} mm</p>
-            <p>Rain: {hourly?.rain[index]} mm</p>
-            <p>Weather Code: {hourly?.weather_code[index]}</p>
+            <div className={styles.forecastDetails}>
+              <h3>{formatDate(hourly.time[index])}</h3>
+              <h2>{hourly.temperature_2m[index]} °C</h2>
+              <p>Humidity: {hourly.relative_humidity_2m[index]} %</p>
+              <p>Precipitation: {hourly.precipitation[index]} mm</p>
+              <p>Rain: {hourly.rain[index]} mm</p>
+              <p>Weather Code: {hourly.weather_code[index]}</p>
+            </div>
           </div>
         );
       }
     });
     return datar;
   };
-  console.log(currentWeather);
+  const handleHourChange = (event: any) => {
+    setSelectedHour(Number(event.target.value));
+  };
   return (
     <div className={styles.weatherCard}>
-      <h1> Weather Forecast</h1>
-
-      <h2>Current Weather</h2>
-      <div>
-        <Image
-          src={getWeatherIcon(currentWeather?.[0].weatherCode)}
-          alt="Weather Icon"
-        />
-        <p>Time: {currentWeather?.[0].time}</p>
-        <p>Temperature: {currentWeather?.[0].temperature} °C</p>
-        <p>Humidity: {currentWeather?.[0].humidity} %</p>
-        <p>Precipitation: {currentWeather?.[0].precipitation} mm</p>
-        <p>Rain: {currentWeather?.[0].rain} mm</p>
-        <p>Weather Code: {currentWeather?.[0].weatherCode}</p>
+      <h1
+        style={{
+          fontSize: "70px",
+          backgroundColor: "#13161a27",
+          paddingLeft: "10px",
+        }}>
+        {city} Weather Forecast
+      </h1>
+      <div className={styles.selectHour}>
+        <label htmlFor="hour-select">Select Hour: </label>
+        <select
+          id="hour-select"
+          value={selectedHour}
+          onChange={handleHourChange}>
+          {Array.from({ length: 24 }, (_, i) => (
+            <option key={i} value={i}>
+              {i}:00
+            </option>
+          ))}
+        </select>
       </div>
-      <h2>7-Day Forecast</h2>
-      <div>{mapFuncDay()}</div>
+      <h2 style={{ paddingLeft: "10px" }}>Current Weather</h2>
+      <div className={styles.currentWeather}>
+        <Image
+          src={getWeatherIcon(currentWeather?.weatherCode)}
+          alt="Weather Icon"
+          className={styles.imageStyle}
+        />
+        <div className={styles.weatherDetails}>
+          <h3>{formatDate(currentWeather?.time)}</h3>
+          <h2>{currentWeather?.temperature} °C</h2>
+          <p>Humidity: {currentWeather?.humidity} %</p>
+          <p>Precipitation: {currentWeather?.precipitation} mm</p>
+          <p>Rain: {currentWeather?.rain} mm</p>
+        </div>
+      </div>
+
+      <h2 style={{ paddingLeft: "10px" }}>7-Day Forecast</h2>
+      <div
+        style={{
+          display: "flex",
+          width: "90%",
+          justifyContent: "space-around",
+          flexWrap: "wrap",
+        }}>
+        {mapFuncDay()}
+      </div>
     </div>
   );
 };

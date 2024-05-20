@@ -23,7 +23,7 @@ const Home = () => {
     setSelectedCity(city);
     fetchSearchedCites(city);
   };
-  console.log(searched);
+
   return (
     <div className={styles.container}>
       <SearchBar onSearch={handleSearch} />

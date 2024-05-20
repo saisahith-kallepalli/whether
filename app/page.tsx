@@ -18,25 +18,10 @@ const Home = () => {
     setSearched(response.data.results);
     console.log(response.data);
   };
-  
-  useEffect(() => {
-    // const fetchWeatherData = async () => {
-    //   try {
-    //     const response = await axios.get(
-    //       `/api/weather?city=${selectedCity || "New York"}`
-    //     );
-    //     setWeatherData(response.data);
-    //   } catch (error) {
-    //     console.error("Error fetching weather data:", error);
-    //   }
-    // };
-    // fetchWeatherData();
-  }, [selectedCity]);
 
   const handleSearch = (city: string) => {
     setSelectedCity(city);
     fetchSearchedCites(city);
-    // router.push(`/?city=${city}`, undefined, { shallow: true });
   };
   console.log(searched);
   return (
@@ -45,7 +30,7 @@ const Home = () => {
 
       <div className={styles.whetherCites}>
         {searched?.map((data: any, index: number) => (
-          <CityCard data={data} />
+          <CityCard data={data} key={index} />
         ))}
       </div>
     </div>
